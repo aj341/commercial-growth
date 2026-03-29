@@ -330,8 +330,8 @@ function Credibility() {
               <p className="text-white/50 mt-2" style={{ fontSize: "0.8rem" }}>$500K to $8B in Settlements</p>
             </div>
             <div className="text-center">
-              <p className="font-black text-white" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1 }}>Under <span className="text-[#3BB9F5]">4</span></p>
-              <p className="text-white/50 mt-2" style={{ fontSize: "0.8rem" }}>Years Timeframe</p>
+              <p className="font-black text-white" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1 }}>&lt;<span className="text-[#3BB9F5]">4</span>yrs</p>
+              <p className="text-white/50 mt-2" style={{ fontSize: "0.8rem" }}>Timeframe</p>
             </div>
           </div>
         </Reveal>
@@ -382,32 +382,31 @@ function Services() {
 function LeadMagnet() {
   const [submitted, setSubmitted] = useState(false);
   return (
-    <section className="relative py-24 md:py-32" style={{ background: "linear-gradient(135deg, #1A9EDE 0%, #3BB9F5 60%, #5CC8F8 100%)" }}>
-      <div className="container relative z-10 text-center">
+    <section className="relative py-24 md:py-32 bg-[#0F1623]">
+      <div className="absolute inset-0 grid-overlay pointer-events-none" />
+      <div className="container relative z-10">
         <Reveal>
-          <p className="text-white/80 font-bold uppercase tracking-[0.18em] mb-4" style={{ fontSize: "0.72rem" }}>Free Resource</p>
-          <h2 className="font-extrabold text-white mb-4" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)", lineHeight: 1.12, letterSpacing: "-0.02em" }}>Not Ready to Talk Yet? Start Here.</h2>
-          <h3 className="text-white/80 font-semibold mb-4" style={{ fontSize: "1.1rem" }}>The 5-Question Business Growth Audit</h3>
-          <p className="text-white/70 max-w-xl mx-auto mb-10" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
-            Diagnose where growth is leaking in your business. Score yourself across five commercial growth levers and find out which one needs fixing first.
-          </p>
+          <div className="rounded-2xl px-8 py-14 md:px-16 md:py-20 text-center" style={{ background: "linear-gradient(135deg, #1A9EDE 0%, #3BB9F5 60%, #5CC8F8 100%)" }}>
+            <p className="text-white/80 font-bold uppercase tracking-[0.18em] mb-4" style={{ fontSize: "0.72rem" }}>Free Resource</p>
+            <h2 className="font-extrabold text-white mb-4" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)", lineHeight: 1.12, letterSpacing: "-0.02em" }}>Not Ready to Talk Yet? Start Here.</h2>
+            <h3 className="text-white/90 font-semibold mb-4" style={{ fontSize: "1.1rem" }}>The 5-Question Business Growth Audit</h3>
+            <p className="text-white/70 max-w-xl mx-auto mb-10" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
+              Diagnose where growth is leaking in your business. Score yourself across five commercial growth levers and find out which one needs fixing first.
+            </p>
+            {!submitted ? (
+              <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
+                <input type="text" placeholder="Your name" required className="flex-1 px-4 py-3 rounded-lg border-2 border-white bg-transparent text-sm text-white placeholder-white/60 outline-none focus:border-white/80 transition-colors" style={{ fontFamily: "'Poppins', sans-serif" }} />
+                <input type="email" placeholder="Your email" required className="flex-1 px-4 py-3 rounded-lg border-2 border-white bg-transparent text-sm text-white placeholder-white/60 outline-none focus:border-white/80 transition-colors" style={{ fontFamily: "'Poppins', sans-serif" }} />
+                <button type="submit" className="px-6 py-3 rounded-lg font-bold text-sm text-white whitespace-nowrap transition-all duration-200 hover:-translate-y-0.5" style={{ background: "#0F1623", fontFamily: "'Poppins', sans-serif" }}>Get the Free Audit</button>
+              </form>
+            ) : (
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 max-w-md mx-auto">
+                <p className="text-white font-bold text-lg">Check your inbox!</p>
+                <p className="text-white/80 text-sm mt-2">Your growth audit is on its way.</p>
+              </div>
+            )}
+          </div>
         </Reveal>
-        {!submitted ? (
-          <Reveal delay={100}>
-            <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
-              <input type="text" placeholder="Your name" required className="flex-1 px-4 py-3 rounded-lg border-none text-sm text-[#111827] placeholder-[#9CA3AF] outline-none" style={{ fontFamily: "'Poppins', sans-serif" }} />
-              <input type="email" placeholder="Your email" required className="flex-1 px-4 py-3 rounded-lg border-none text-sm text-[#111827] placeholder-[#9CA3AF] outline-none" style={{ fontFamily: "'Poppins', sans-serif" }} />
-              <button type="submit" className="px-6 py-3 rounded-lg font-bold text-sm text-white whitespace-nowrap transition-all duration-200 hover:-translate-y-0.5" style={{ background: "#0F1623", fontFamily: "'Poppins', sans-serif" }}>Get the Free Audit</button>
-            </form>
-          </Reveal>
-        ) : (
-          <Reveal>
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 max-w-md mx-auto">
-              <p className="text-white font-bold text-lg">Check your inbox!</p>
-              <p className="text-white/80 text-sm mt-2">Your growth audit is on its way.</p>
-            </div>
-          </Reveal>
-        )}
       </div>
     </section>
   );
