@@ -5,26 +5,52 @@ import { useCountUp } from "@/hooks/useCountUp";
 const CALENDLY_URL = "https://calendly.com/d/ctmp-tcq-tbf/design-bees-demo-consultation";
 
 function CalendlyModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [animateIn, setAnimateIn] = useState(false);
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
+      setIframeLoaded(false);
+      requestAnimationFrame(() => setAnimateIn(true));
     } else {
       document.body.style.overflow = "";
+      setAnimateIn(false);
     }
     return () => { document.body.style.overflow = ""; };
   }, [open]);
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      <div className="relative w-full max-w-2xl bg-[#1A2235] rounded-2xl overflow-hidden shadow-2xl" style={{ height: "min(85vh, 720px)" }} onClick={(e) => e.stopPropagation()}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" style={{ opacity: animateIn ? 1 : 0, transition: "opacity 0.3s ease" }} />
+      <div
+        className="relative w-full max-w-2xl bg-[#1A2235] rounded-2xl overflow-hidden shadow-2xl"
+        style={{ height: "min(85vh, 720px)", opacity: animateIn ? 1 : 0, transform: animateIn ? "scale(1) translateY(0)" : "scale(0.95) translateY(12px)", transition: "opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <h3 className="text-white font-bold text-base">Book a Discovery Call</h3>
           <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors" aria-label="Close">
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
           </button>
         </div>
-        <iframe src={CALENDLY_URL} className="w-full border-none" style={{ height: "calc(100% - 57px)" }} title="Schedule a call" />
+        <div className="relative" style={{ height: "calc(100% - 57px)" }}>
+          {!iframeLoaded && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+              <div className="relative w-10 h-10">
+                <div className="absolute inset-0 rounded-full border-2 border-white/10" />
+                <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#3BB9F5] animate-spin" />
+              </div>
+              <p className="text-white/40 text-sm font-medium">Loading calendar...</p>
+            </div>
+          )}
+          <iframe
+            src={CALENDLY_URL}
+            className="w-full h-full border-none"
+            title="Schedule a call"
+            onLoad={() => setIframeLoaded(true)}
+            style={{ opacity: iframeLoaded ? 1 : 0, transition: "opacity 0.4s ease" }}
+          />
+        </div>
       </div>
     </div>
   );
