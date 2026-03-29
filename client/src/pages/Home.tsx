@@ -96,7 +96,7 @@ function StickyNav({ onBookCall }: { onBookCall: () => void }) {
     <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style={{ background: scrolled ? "rgba(15,22,35,0.92)" : "transparent", backdropFilter: scrolled ? "blur(12px)" : "none", boxShadow: scrolled ? "0 2px 20px rgba(0,0,0,0.08)" : "none", borderBottom: scrolled ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent" }}>
       <div className="container flex items-center justify-between" style={{ height: 72 }}>
         <a href="#" className="flex items-center gap-2 shrink-0">
-          <img src={LOGO} alt="Commercial Growth" className="h-10 w-auto" />
+          <img src={LOGO} alt="Commercial Growth" className="h-14 w-auto" />
         </a>
         <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
@@ -495,7 +495,7 @@ function Footer() {
     <footer className="py-12 border-t border-white/7 bg-[#0F1623]">
       <div className="container flex flex-col md:flex-row items-center justify-between gap-6">
         <a href="#" className="flex items-center gap-2">
-          <img src={LOGO} alt="Commercial Growth" className="h-7 w-auto" />
+          <img src={LOGO} alt="Commercial Growth" className="h-10 w-auto" />
         </a>
         <div className="flex items-center gap-6">
           <a href="#blueprint" className="text-white/50 text-sm hover:text-[#3BB9F5] transition-colors">How It Works</a>
