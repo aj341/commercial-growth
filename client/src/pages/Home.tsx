@@ -2,6 +2,34 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCountUp } from "@/hooks/useCountUp";
 
+const CALENDLY_URL = "https://calendly.com/d/ctmp-tcq-tbf/design-bees-demo-consultation";
+
+function CalendlyModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="relative w-full max-w-2xl bg-[#1A2235] rounded-2xl overflow-hidden shadow-2xl" style={{ height: "min(85vh, 720px)" }} onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+          <h3 className="text-white font-bold text-base">Book a Discovery Call</h3>
+          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors" aria-label="Close">
+            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+          </button>
+        </div>
+        <iframe src={CALENDLY_URL} className="w-full border-none" style={{ height: "calc(100% - 57px)" }} title="Schedule a call" />
+      </div>
+    </div>
+  );
+}
+
 const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663488533278/Vr2TGVp28Rc8GfDRVCESuq/hero-bg-LW6pcJwJAEpB3bycpWfFQU.webp";
 const CTA_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663488533278/Vr2TGVp28Rc8GfDRVCESuq/cta-bg-C4gzBzGAyhe5p3ho2SxEaL.webp";
 const LOGO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663488533278/Vr2TGVp28Rc8GfDRVCESuq/commercial-growth-logo_17e19301.png";
@@ -15,7 +43,7 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-function StickyNav() {
+function StickyNav({ onBookCall }: { onBookCall: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -48,7 +76,7 @@ function StickyNav() {
           {links.map((l) => (
             <a key={l.id} href={`#${l.id}`} className="text-sm font-medium transition-colors duration-200" style={{ color: active === l.id ? "#3BB9F5" : "#9CA3AF" }}>{l.label}</a>
           ))}
-          <a href="#contact" className="nav-cta">Book a Call</a>
+          <button onClick={onBookCall} className="nav-cta">Book a Call</button>
         </div>
         <button className="md:hidden flex flex-col gap-1.5 p-2" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
           <span className={`block w-5 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
@@ -62,7 +90,7 @@ function StickyNav() {
             {links.map((l) => (
               <a key={l.id} href={`#${l.id}`} onClick={() => setMobileOpen(false)} className="text-sm font-medium py-2" style={{ color: active === l.id ? "#3BB9F5" : "#9CA3AF" }}>{l.label}</a>
             ))}
-            <a href="#contact" onClick={() => setMobileOpen(false)} className="btn-primary text-center text-sm py-2.5">Book a Call</a>
+            <button onClick={() => { setMobileOpen(false); onBookCall(); }} className="btn-primary text-center text-sm py-2.5 w-full">Book a Call</button>
           </div>
         </div>
       )}
@@ -70,7 +98,7 @@ function StickyNav() {
   );
 }
 
-function Hero() {
+function Hero({ onBookCall }: { onBookCall: () => void }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { const t = setTimeout(() => setLoaded(true), 100); return () => clearTimeout(t); }, []);
   return (
@@ -92,7 +120,7 @@ function Hero() {
             Strategies built around commercial outcomes, where every dollar spent has a justifiable expected return.
           </p>
           <div className="flex flex-wrap gap-4" style={{ opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(20px)", transition: "all 0.7s ease 0.7s" }}>
-            <a href="#contact" className="btn-primary">Book a Discovery Call</a>
+            <button onClick={onBookCall} className="btn-primary">Book a Discovery Call</button>
             <a href="#blueprint" className="btn-outline-dark">See How It Works</a>
           </div>
         </div>
@@ -412,7 +440,7 @@ function LeadMagnet() {
   );
 }
 
-function Contact() {
+function Contact({ onBookCall }: { onBookCall: () => void }) {
   return (
     <section id="contact" className="relative py-24 md:py-32 bg-[#0F1623] overflow-hidden">
       <div className="absolute inset-0">
@@ -429,7 +457,7 @@ function Contact() {
           </p>
         </Reveal>
         <Reveal delay={100}>
-          <a href="#contact" className="btn-primary text-base px-8 py-4">Book a Discovery Call</a>
+          <button onClick={onBookCall} className="btn-primary text-base px-8 py-4">Book a Discovery Call</button>
         </Reveal>
       </div>
     </section>
@@ -456,17 +484,20 @@ function Footer() {
 }
 
 export default function Home() {
+  const [calendlyOpen, setCalendlyOpen] = useState(false);
+  const openCalendly = useCallback(() => setCalendlyOpen(true), []);
   return (
     <div className="min-h-screen flex flex-col">
-      <StickyNav />
-      <Hero />
+      <CalendlyModal open={calendlyOpen} onClose={() => setCalendlyOpen(false)} />
+      <StickyNav onBookCall={openCalendly} />
+      <Hero onBookCall={openCalendly} />
       <PainPoints />
       <Blueprint />
       <WhoIWorkWith />
       <Credibility />
       <Services />
       <LeadMagnet />
-      <Contact />
+      <Contact onBookCall={openCalendly} />
       <Footer />
     </div>
   );
